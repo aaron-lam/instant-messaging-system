@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Let's Chat!");
         setContentView(R.layout.activity_main);
 
         // data to populate the RecyclerView with
