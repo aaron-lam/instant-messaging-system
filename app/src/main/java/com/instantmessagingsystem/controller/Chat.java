@@ -4,8 +4,15 @@ import java.util.Stack;
 
 public class Chat {
 
-    private Stack<String> messages = new Stack<String>();
+    private Stack<String> messages;
     private String typedMessage;
+    private DatabaseQueries dbQueries;
+
+    public Chat(){
+        messages = new Stack<String>();
+        typedMessage = "";
+        dbQueries = new DatabaseQueries();
+    }
 
     //get last message ID value from DB and compare with messages size
     //push all message IDs greater than messages size
