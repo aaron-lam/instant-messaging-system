@@ -4,11 +4,10 @@ public class Login {
 
     //Check with DB if credentials are correct.
     //Hash password before sending
-    private final String table = "Accounts";
 
-    private boolean checkCredentials(String username, String hashedPassword) {
-        //Needs to be modified
-        dbQueries.get(table, username);
+    //Accounts is hard coded because the method is static
+    public static boolean checkCredentials(String username, String hashedPassword) {
+//        dbQueries.get("Accounts", username);
         return false;
     }
 }
