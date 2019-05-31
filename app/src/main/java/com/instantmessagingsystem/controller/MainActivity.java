@@ -65,15 +65,15 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.join_button:
-                showAddItemDialog(MainActivity.this);
+            case R.id.create_button:
+                showCreateButton(MainActivity.this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void showAddItemDialog(Context c) {
+    private void showCreateButton(Context c) {
         final EditText taskEditText = new EditText(c);
         taskEditText.setGravity(Gravity.CENTER);
         AlertDialog dialog = new AlertDialog.Builder(c)
@@ -91,5 +91,28 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         TextView messageView = dialog.findViewById(android.R.id.message);
         assert messageView != null;
         messageView.setGravity(Gravity.CENTER);
+    }
+
+    private void addRoomId() {
+//        if(user == null) {
+//            Toast.makeText(MainActivity.this, "Need to login first", Toast.LENGTH_LONG).show();
+//            return;
+//        }
+//        String username = user.getUserName();
+//        String chatId = chatIdText.getText().toString();
+//
+//        //attempt to insert new chat to Chat database table
+//        boolean isInserted = dbHelper.insertChat(chatId);
+//
+//        if(isInserted == true){
+//            //attempt to insert new entry to Chat_User database table
+//            dbHelper.insertChatUser(username, chatId);
+//            //add new chat to user's chats array
+//            ArrayList<Chat> chats  = user.getChats();
+//            chats.add(new Chat(chatId));
+//            Toast.makeText(MainActivity.this, "Chat Inserted", Toast.LENGTH_LONG).show();
+//        } else{
+//            Toast.makeText(MainActivity.this, "Chat Not Inserted", Toast.LENGTH_LONG).show();
+//        }
     }
 }

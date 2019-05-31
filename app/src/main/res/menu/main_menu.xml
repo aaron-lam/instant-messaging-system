@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/join_button"
+    <item android:id="@+id/create_button"
         android:title="@string/join_button_name"
         app:showAsAction="ifRoom" />
 </menu>
