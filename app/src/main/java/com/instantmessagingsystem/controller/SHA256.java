@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class HashPassword {
+public class SHA256 {
 
     //Example from https://www.geeksforgeeks.org/sha-256-hash-in-java/
     public static String hashPassword(String password) {

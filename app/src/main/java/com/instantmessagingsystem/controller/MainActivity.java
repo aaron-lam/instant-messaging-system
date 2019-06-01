@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.create_button:
+            case R.id.create_account_button:
                 showCreateButton(MainActivity.this);
                 return true;
             default:
