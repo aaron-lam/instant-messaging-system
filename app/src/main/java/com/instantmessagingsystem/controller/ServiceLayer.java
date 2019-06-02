@@ -15,50 +15,49 @@ import java.util.Stack;
 public class ServiceLayer {
 
     private DatabaseHelper dbHelper;
-    private User user;
     private InputVerification verification;
 
-    private String username;
-    private String hashedPassword;
+    private User user;
     private ArrayList<Chat> chatList;
     private int activeChat;
-
     private Stack<String> messages;
     private String typedMessage;
 
     public ServiceLayer(Context context){
         dbHelper = new DatabaseHelper(context);
         verification = new InputVerification();
+        user = null;
         messages = new Stack<String>();
         typedMessage = "";
-        this.username = username;
-        this.hashedPassword = hashedPassword;
-        chatList = new ArrayList<Chat>();
-        activeChat = -1;
     }
 
-    public boolean createAccount(Context context, String username, String hashedPass){
-        boolean isInserted = dbHelper.insertUser(username, hashedPassword);
+    public boolean createAccount(Context context, String username, String password){
+        boolean isInserted = dbHelper.insertUser(username, password);
         String toastMessage = (isInserted) ? "account created" : "cannot create account";
         Toast.makeText(context, toastMessage, Toast.LENGTH_LONG).show();
+        if(isInserted){
+            return true;
+        }
         return false;
     }
 
-    public boolean loginUser(Context context){
-        boolean isExistingUser = dbHelper.isExistingUser(username, hashedPassword);
-        String toastMessage = (isExistingUser) ? "Login Successful" : "Login Unsuccessful";
-        Toast.makeText(context, toastMessage, Toast.LENGTH_LONG).show();
+    public boolean loginUser(Context context, String username, String password){
+        if(validateCredentials(user.getUserName(), user.getPassword())) {
+            boolean isExistingUser = dbHelper.isExistingUser(username, password);
+            String toastMessage = (isExistingUser) ? "Login Successful" : "Login Unsuccessful";
+            Toast.makeText(context, toastMessage, Toast.LENGTH_LONG).show();
 
-        if (isExistingUser) {
-            //create user and user's chat instances
-            user = new User(username, hashedPassword);
-            ArrayList<String> chatIds = dbHelper.getUserChatIds(username);
-            ArrayList<Chat> chats = new ArrayList<>();
-            for (String chatId : chatIds)
-                chats.add(new Chat(chatId));
-            user.setChats(chats);
-            // go to main page
-            return true;
+            if (isExistingUser) {
+                //create user and user's chat instances
+                user = new User(username, password);
+                ArrayList<String> chatIds = dbHelper.getUserChatIds(username);
+                ArrayList<Chat> chats = new ArrayList<>();
+                for (String chatId : chatIds)
+                    chats.add(new Chat(chatId));
+                user.setChats(chats);
+                // go to main page
+                return true;
+            }
         }
         return false;
     }
@@ -104,8 +103,7 @@ public class ServiceLayer {
         chatList.remove(index);
     }
     public void logout(){
-        username = "";
-        hashedPassword = "";
+        user = null;
         chatList = null;
         activeChat = -1;
     }
