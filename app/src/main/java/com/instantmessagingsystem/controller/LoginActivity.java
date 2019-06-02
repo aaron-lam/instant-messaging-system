@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.instantmessagingsystem.R;
 import com.instantmessagingsystem.serviceLayer.ServiceLayer;
@@ -50,9 +51,19 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser() {
-        if(serviceLayer.validateCredentials(usernameText.getText().toString(), passwordText.getText().toString())) {
-            if (serviceLayer.loginUser(this, usernameText.getText().toString(), passwordText.getText().toString())) {
-                startActivity(new Intent(this, MainActivity.class));
+        boolean isValid = true;
+//        boolean isValid = serviceLayer.validateCredentials(usernameText.getText().toString(), passwordText.getText().toString());
+        String toastMessage = (isValid) ? "Valid" : "Invalid";
+        Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
+
+        if(isValid) {
+            boolean userExists = true;
+//            boolean userExists = serviceLayer.userExists(usernameText.getText().toString(), passwordText.getText().toString());
+            toastMessage = (userExists) ? "Login Successful" : "Login Unsuccessful";
+            Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
+            if(userExists) {
+                serviceLayer.loginUser(usernameText.getText().toString(), passwordText.getText().toString());
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
         }
     }
