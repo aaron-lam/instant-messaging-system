@@ -51,8 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser() {
-        boolean isValid = true;
-//        boolean isValid = serviceLayer.validateCredentials(usernameText.getText().toString(), passwordText.getText().toString());
+        boolean isValid = serviceLayer.validateCredentials(usernameText.getText().toString(), passwordText.getText().toString());
         String toastMessage = (isValid) ? "Valid" : "Invalid";
         Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
 

@@ -11,7 +11,7 @@ public class InputVerification {
         if(!validChars(password)){
             return false;
         }
-        return false;
+        return true;
     }
 
     //Check if username meets requirements
