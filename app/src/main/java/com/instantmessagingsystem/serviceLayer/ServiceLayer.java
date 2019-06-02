@@ -1,8 +1,6 @@
-package com.instantmessagingsystem.controller;
+package com.instantmessagingsystem.serviceLayer;
 
 import android.content.Context;
-import android.content.Intent;
-import android.renderscript.ScriptGroup;
 import android.widget.Toast;
 
 import com.instantmessagingsystem.model.entities.Chat;
@@ -42,7 +40,7 @@ public class ServiceLayer {
     }
 
     public boolean loginUser(Context context, String username, String password){
-        if(validateCredentials(user.getUserName(), user.getPassword())) {
+        if(validateCredentials(username, password)) {
             boolean isExistingUser = dbHelper.isExistingUser(username, password);
             String toastMessage = (isExistingUser) ? "Login Successful" : "Login Unsuccessful";
             Toast.makeText(context, toastMessage, Toast.LENGTH_LONG).show();
@@ -52,7 +50,10 @@ public class ServiceLayer {
                 user = new User(username, password);
                 ArrayList<String> chatIds = dbHelper.getUserChatIds(username);
                 ArrayList<Chat> chats = new ArrayList<>();
+
+                //add all chats related to chatID
                 for (String chatId : chatIds)
+
                     chats.add(new Chat(chatId));
                 user.setChats(chats);
                 // go to main page

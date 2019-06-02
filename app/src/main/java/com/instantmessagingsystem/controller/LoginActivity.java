@@ -6,19 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.instantmessagingsystem.R;
-import com.instantmessagingsystem.model.entities.Chat;
-import com.instantmessagingsystem.model.mapper.DatabaseHelper;
-import com.instantmessagingsystem.model.entities.User;
-
-import java.util.ArrayList;
+import com.instantmessagingsystem.serviceLayer.ServiceLayer;
 
 public class LoginActivity extends AppCompatActivity {
 
     private ServiceLayer serviceLayer;
-//    private DatabaseHelper dbHelper;
 
     private Button loginButton;
     private Button createAccountButton;
@@ -34,7 +28,6 @@ public class LoginActivity extends AppCompatActivity {
         // reference class field to UI objects
         passwordText = findViewById(R.id.password_edit_text);
         serviceLayer = new ServiceLayer(this);
-//        dbHelper = new DatabaseHelper(this);
         loginButton = findViewById(R.id.login_button);
         createAccountButton = findViewById(R.id.create_account_button);
         usernameText = findViewById(R.id.username_edit_text);
@@ -57,17 +50,28 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser() {
-//        String username = usernameText.getText().toString();
-//        String password = passwordText.getText().toString();
         if(serviceLayer.validateCredentials(usernameText.getText().toString(), passwordText.getText().toString())) {
             if (serviceLayer.loginUser(this, usernameText.getText().toString(), passwordText.getText().toString())) {
                 startActivity(new Intent(this, MainActivity.class));
             }
         }
+    }
+}
+
+/*  Previous class variables
+//    private DatabaseHelper dbHelper;
+ */
+
+/* Previous constructor logic
+//        dbHelper = new DatabaseHelper(this);
+ */
+
+/* Previous login logic
+//        String username = usernameText.getText().toString();
+//        String password = passwordText.getText().toString();
 //        boolean isExistingUser = dbHelper.isExistingUser(username, password);
 //        String toastMessage = (isExistingUser) ? "Login Successfully" : "Login Unsuccessfully";
 //        Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
-
 //        if (isExistingUser) {
 //            //create user and user's chat instances
 //            user = new User(username, password);
@@ -79,5 +83,4 @@ public class LoginActivity extends AppCompatActivity {
 //            // go to main page
 //            startActivity(new Intent(LoginActivity.this, MainActivity.class));
 //        }
-    }
-}
+* */

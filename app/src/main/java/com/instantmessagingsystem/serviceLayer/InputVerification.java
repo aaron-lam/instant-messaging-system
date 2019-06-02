@@ -1,4 +1,4 @@
-package com.instantmessagingsystem.controller;
+package com.instantmessagingsystem.serviceLayer;
 
 public class InputVerification {
 

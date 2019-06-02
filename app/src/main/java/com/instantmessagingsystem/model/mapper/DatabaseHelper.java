@@ -11,6 +11,25 @@ import java.util.ArrayList;
 //persistence layer class
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    //private constants & queries
+    private static final String TABLE_User = "User";
+    private static final String TABLE_Chat = "Chat";
+    private static final String TABLE_Chat_User = "Chat_User";
+
+    private static final String COL1_User = "username";
+    private static final String COL1_Chat = "chat_id";
+    private static final String COL2_User = "password";
+
+    private static final String createUserTable = "CREATE TABLE " + TABLE_User + "(" +
+            COL1_User + " TEXT PRIMARY KEY, " +
+            COL2_User + " TEXT)";
+    private static final String createChatTable = "CREATE TABLE " + TABLE_Chat + "(" +
+            COL1_Chat + " TEXT PRIMARY KEY)";
+    private static final String createChatUserTable = "CREATE TABLE " + TABLE_Chat_User + "(" +
+            COL1_User + " TEXT REFERENCES " + TABLE_User + ", " +
+            COL1_Chat + " TEXT REFERENCES " + TABLE_Chat + ", " +
+            "PRIMARY KEY(" + COL1_User + ", " + COL1_Chat + "))";
+
     //constructor
     public DatabaseHelper(Context context) {
         super(context, TABLE_User, null, 1);
@@ -110,27 +129,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return chats;
     }
-
-    //private constants & queries
-    private static final String TABLE_User = "User";
-    private static final String COL1_User = "username";
-    private static final String COL2_User = "password";
-
-    private static final String TABLE_Chat = "Chat";
-    private static final String COL1_Chat = "chat_id";
-
-    private static final String TABLE_Chat_User = "Chat_User";
-
-
-    private static final String createUserTable = "CREATE TABLE " + TABLE_User + "(" +
-            COL1_User + " TEXT PRIMARY KEY, " +
-            COL2_User + " TEXT)";
-
-    private static final String createChatTable = "CREATE TABLE " + TABLE_Chat + "(" +
-            COL1_Chat + " TEXT PRIMARY KEY)";
-
-    private static final String createChatUserTable = "CREATE TABLE " + TABLE_Chat_User + "(" +
-            COL1_User + " TEXT REFERENCES " + TABLE_User + ", " +
-            COL1_Chat + " TEXT REFERENCES " + TABLE_Chat + ", " +
-            "PRIMARY KEY(" + COL1_User + ", " + COL1_Chat + "))";
 }

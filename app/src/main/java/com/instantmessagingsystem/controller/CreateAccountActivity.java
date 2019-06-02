@@ -6,10 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.instantmessagingsystem.R;
-import com.instantmessagingsystem.model.mapper.DatabaseHelper;
+import com.instantmessagingsystem.serviceLayer.ServiceLayer;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
@@ -18,8 +17,6 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private EditText usernameText;
     private EditText passwordText;
-
-//    private DatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +27,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         createAccountButton = findViewById(R.id.create_account_button);
         usernameText = findViewById(R.id.username_edit_text);
         passwordText = findViewById(R.id.password_edit_text);
-//        dbHelper = new DatabaseHelper(this);
         serviceLayer = new ServiceLayer(this);
 
         // add on click listener to login button
@@ -43,6 +39,22 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     private void createAccount() {
+        if (serviceLayer.createAccount(this, usernameText.getText().toString(), passwordText.getText().toString())) {
+            // go to main page
+            startActivity(new Intent(CreateAccountActivity.this, MainActivity.class));
+        }
+    }
+}
+
+/* Previous class variables
+* //    private DatabaseHelper dbHelper;
+ */
+
+/* Previous constructor logic
+* //        dbHelper = new DatabaseHelper(this);
+ */
+
+/* Previous create account logic
 //        String username = usernameText.getText().toString();
 //        String password = passwordText.getText().toString();
 
@@ -50,10 +62,4 @@ public class CreateAccountActivity extends AppCompatActivity {
 //        boolean isInserted = dbHelper.insertUser(username, password);
 //        String toastMessage = (isInserted) ? "account created" : "cannot create account";
 //        Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
-
-        if (serviceLayer.createAccount(this, usernameText.getText().toString(), passwordText.getText().toString())) {
-            // go to main page
-            startActivity(new Intent(CreateAccountActivity.this, MainActivity.class));
-        }
-    }
-}
+*/

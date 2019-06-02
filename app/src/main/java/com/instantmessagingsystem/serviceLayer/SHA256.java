@@ -1,4 +1,4 @@
-package com.instantmessagingsystem.controller;
+package com.instantmessagingsystem.serviceLayer;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
