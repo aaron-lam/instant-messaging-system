@@ -57,8 +57,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser() {
-        String username = usernameText.getText().toString();
-        String password = passwordText.getText().toString();
+//        String username = usernameText.getText().toString();
+//        String password = passwordText.getText().toString();
         if(serviceLayer.validateCredentials(usernameText.getText().toString(), passwordText.getText().toString())) {
             if (serviceLayer.loginUser(this)) {
                 startActivity(new Intent(this, MainActivity.class));

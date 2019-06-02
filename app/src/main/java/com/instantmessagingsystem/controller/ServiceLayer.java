@@ -37,18 +37,16 @@ public class ServiceLayer {
         activeChat = -1;
     }
 
-    public boolean createAccount(String username, String hashedPass){
-        //send username and hashedPass to DB for storage
-        if(checkIfUsernameIsAvailable(username)){
-            //push credentials to DB
-            return true;
-        }
+    public boolean createAccount(Context context, String username, String hashedPass){
+        boolean isInserted = dbHelper.insertUser(username, hashedPassword);
+        String toastMessage = (isInserted) ? "account created" : "cannot create account";
+        Toast.makeText(context, toastMessage, Toast.LENGTH_LONG).show();
         return false;
     }
 
     public boolean loginUser(Context context){
         boolean isExistingUser = dbHelper.isExistingUser(username, hashedPassword);
-        String toastMessage = (isExistingUser) ? "Login Successfully" : "Login Unsuccessful";
+        String toastMessage = (isExistingUser) ? "Login Successful" : "Login Unsuccessful";
         Toast.makeText(context, toastMessage, Toast.LENGTH_LONG).show();
 
         if (isExistingUser) {
@@ -72,15 +70,6 @@ public class ServiceLayer {
                 return true;
             }
             return false;
-        }
-        return false;
-    }
-
-    private boolean checkIfUsernameIsAvailable(String username) {
-        //Check if username is available
-        //logic will need to be adjusted
-        if (username != "user") {
-            return true;
         }
         return false;
     }
