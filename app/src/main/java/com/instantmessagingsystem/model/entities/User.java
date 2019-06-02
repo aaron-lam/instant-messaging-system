@@ -6,6 +6,11 @@ import java.util.ArrayList;
 
 public class User {
 
+    //private fields
+    private String username;
+    private String password;
+    private ArrayList<Chat> chats;
+
     //constructor
     public User(String username, String password) {
         this.username = username;
@@ -22,8 +27,4 @@ public class User {
 
     public void setChats(ArrayList<Chat> chats) { this.chats = chats; }
 
-    //private fields
-    private String username;
-    private String password;
-    private ArrayList<Chat> chats;
 }

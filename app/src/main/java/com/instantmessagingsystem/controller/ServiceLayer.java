@@ -1,11 +1,22 @@
 package com.instantmessagingsystem.controller;
 
+import android.content.Context;
+import android.content.Intent;
+import android.renderscript.ScriptGroup;
+import android.widget.Toast;
+
 import com.instantmessagingsystem.model.entities.Chat;
+import com.instantmessagingsystem.model.entities.User;
+import com.instantmessagingsystem.model.mapper.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.Stack;
 
 public class ServiceLayer {
+
+    private DatabaseHelper dbHelper;
+    private User user;
+    private InputVerification verification;
 
     private String username;
     private String hashedPassword;
@@ -15,7 +26,9 @@ public class ServiceLayer {
     private Stack<String> messages;
     private String typedMessage;
 
-    public ServiceLayer(){
+    public ServiceLayer(Context context){
+        dbHelper = new DatabaseHelper(context);
+        verification = new InputVerification();
         messages = new Stack<String>();
         typedMessage = "";
         this.username = username;
@@ -33,17 +46,42 @@ public class ServiceLayer {
         return false;
     }
 
-    private boolean checkIfUsernameIsAvailable(String username){
-        //Check if username is available
-        //logic will need to be adjusted
-        if(username != "user"){
+    public boolean loginUser(Context context){
+        boolean isExistingUser = dbHelper.isExistingUser(username, hashedPassword);
+        String toastMessage = (isExistingUser) ? "Login Successfully" : "Login Unsuccessful";
+        Toast.makeText(context, toastMessage, Toast.LENGTH_LONG).show();
+
+        if (isExistingUser) {
+            //create user and user's chat instances
+            user = new User(username, hashedPassword);
+            ArrayList<String> chatIds = dbHelper.getUserChatIds(username);
+            ArrayList<Chat> chats = new ArrayList<>();
+            for (String chatId : chatIds)
+                chats.add(new Chat(chatId));
+            user.setChats(chats);
+            // go to main page
             return true;
         }
         return false;
     }
 
-    public static boolean checkCredentials(String username, String hashedPassword) {
-//        dbQueries.get("Accounts", username);
+    public boolean validateCredentials(String username, String password){
+        if(verification.validateUsername(username)){
+            if(verification.validatePassword(password)){
+                user = new User(username, password);
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    private boolean checkIfUsernameIsAvailable(String username) {
+        //Check if username is available
+        //logic will need to be adjusted
+        if (username != "user") {
+            return true;
+        }
         return false;
     }
 
@@ -55,35 +93,27 @@ public class ServiceLayer {
             }
         }
     }
-
     public void sendMessage(){
         //send typedMessage to DB
     }
-
     public void updateChatDisplay(){
 
     }
-
     public ArrayList<Chat> getChatList(){
         return chatList;
     }
-
     public void setActiveChat(int index){
         this.activeChat = index;
     }
-
     public int getActiveChat(){
         return activeChat;
     }
-
     public void addChat(Chat newChat){
         chatList.add(newChat);
     }
-
     public void removeChat(int index){
         chatList.remove(index);
     }
-
     public void logout(){
         username = "";
         hashedPassword = "";

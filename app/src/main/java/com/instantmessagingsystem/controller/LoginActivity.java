@@ -17,8 +17,8 @@ import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private User user;
-    private DatabaseHelper dbHelper;
+    private ServiceLayer serviceLayer;
+//    private DatabaseHelper dbHelper;
 
     private Button loginButton;
     private Button createAccountButton;
@@ -33,7 +33,8 @@ public class LoginActivity extends AppCompatActivity {
 
         // reference class field to UI objects
         passwordText = findViewById(R.id.password_edit_text);
-        dbHelper = new DatabaseHelper(this);
+        serviceLayer = new ServiceLayer(this);
+//        dbHelper = new DatabaseHelper(this);
         loginButton = findViewById(R.id.login_button);
         createAccountButton = findViewById(R.id.create_account_button);
         usernameText = findViewById(R.id.username_edit_text);
@@ -58,21 +59,25 @@ public class LoginActivity extends AppCompatActivity {
     private void loginUser() {
         String username = usernameText.getText().toString();
         String password = passwordText.getText().toString();
-
-        boolean isExistingUser = dbHelper.isExistingUser(username, password);
-        String toastMessage = (isExistingUser) ? "Login Successfully" : "Login Unsuccessfully";
-        Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
-
-        if (isExistingUser) {
-            //create user and user's chat instances
-            user = new User(username, password);
-            ArrayList<String> chatIds = dbHelper.getUserChatIds(username);
-            ArrayList<Chat> chats = new ArrayList<>();
-            for (String chatId : chatIds)
-                chats.add(new Chat(chatId));
-            user.setChats(chats);
-            // go to main page
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        if(serviceLayer.validateCredentials(usernameText.getText().toString(), passwordText.getText().toString())) {
+            if (serviceLayer.loginUser(this)) {
+                startActivity(new Intent(this, MainActivity.class));
+            }
         }
+//        boolean isExistingUser = dbHelper.isExistingUser(username, password);
+//        String toastMessage = (isExistingUser) ? "Login Successfully" : "Login Unsuccessfully";
+//        Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
+
+//        if (isExistingUser) {
+//            //create user and user's chat instances
+//            user = new User(username, password);
+//            ArrayList<String> chatIds = dbHelper.getUserChatIds(username);
+//            ArrayList<Chat> chats = new ArrayList<>();
+//            for (String chatId : chatIds)
+//                chats.add(new Chat(chatId));
+//            user.setChats(chats);
+//            // go to main page
+//            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//        }
     }
 }
