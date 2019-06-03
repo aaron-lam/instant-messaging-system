@@ -18,19 +18,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.instantmessagingsystem.R;
+import com.instantmessagingsystem.serviceLayer.ServiceLayer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.ItemClickListener {
 
-    RecyclerViewAdapter adapter;
+    private ServiceLayer serviceLayer;
+
+    private RecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Let's Chat!");
         setContentView(R.layout.activity_main);
+
+        serviceLayer = new ServiceLayer(this);
 
         // data to populate the RecyclerView with
         List<String> chatsListDemo = new ArrayList<>();
@@ -65,12 +70,39 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.create_account_button:
+            case R.id.create_button:
                 showCreateButton(MainActivity.this);
                 return true;
+            case R.id.search_button:
+                showSearchButton(MainActivity.this);
+                return true;
             default:
+                System.out.println(item.getItemId());
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showSearchButton(Context c) {
+        final EditText taskEditText = new EditText(c);
+        taskEditText.setGravity(Gravity.CENTER);
+        AlertDialog dialog = new AlertDialog.Builder(c)
+                .setMessage("Please enter chat room ID:")
+                .setView(taskEditText)
+                .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String chatId = String.valueOf(taskEditText.getText());
+                        boolean isInserted = serviceLayer.searchChatId(chatId);
+                        String toastMessage = (isInserted) ? "Chat Found" : "Chat Not Found";
+                        Toast.makeText(MainActivity.this, toastMessage, Toast.LENGTH_LONG).show();
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .create();
+        dialog.show();
+        TextView messageView = dialog.findViewById(android.R.id.message);
+        assert messageView != null;
+        messageView.setGravity(Gravity.CENTER);
     }
 
     private void showCreateButton(Context c) {
@@ -82,7 +114,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                 .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String task = String.valueOf(taskEditText.getText());
+                        String chatId = String.valueOf(taskEditText.getText());
+                        boolean isInserted = serviceLayer.addChatId(chatId);
+                        String toastMessage = (isInserted) ? "Chat Inserted" : "Chat Not Inserted";
+                        Toast.makeText(MainActivity.this, toastMessage, Toast.LENGTH_LONG).show();
                     }
                 })
                 .setNegativeButton("Cancel", null)
@@ -91,28 +126,5 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         TextView messageView = dialog.findViewById(android.R.id.message);
         assert messageView != null;
         messageView.setGravity(Gravity.CENTER);
-    }
-
-    private void addRoomId() {
-//        if(user == null) {
-//            Toast.makeText(MainActivity.this, "Need to login first", Toast.LENGTH_LONG).show();
-//            return;
-//        }
-//        String username = user.getUserName();
-//        String chatId = chatIdText.getText().toString();
-//
-//        //attempt to insert new chat to Chat database table
-//        boolean isInserted = dbHelper.insertChat(chatId);
-//
-//        if(isInserted == true){
-//            //attempt to insert new entry to Chat_User database table
-//            dbHelper.insertChatUser(username, chatId);
-//            //add new chat to user's chats array
-//            ArrayList<Chat> chats  = user.getChats();
-//            chats.add(new Chat(chatId));
-//            Toast.makeText(MainActivity.this, "Chat Inserted", Toast.LENGTH_LONG).show();
-//        } else{
-//            Toast.makeText(MainActivity.this, "Chat Not Inserted", Toast.LENGTH_LONG).show();
-//        }
     }
 }

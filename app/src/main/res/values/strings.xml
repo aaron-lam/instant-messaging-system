@@ -96,5 +96,6 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
-    <string name="join_button_name">Create</string>
+    <string name="create_button_name">Create</string>
+    <string name="search_button_name">Search</string>
 </resources>

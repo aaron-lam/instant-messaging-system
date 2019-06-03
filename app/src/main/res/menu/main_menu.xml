@@ -2,6 +2,9 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/create_button"
-        android:title="@string/join_button_name"
+        android:title="@string/create_button_name"
+        app:showAsAction="ifRoom" />
+    <item android:id="@+id/search_button"
+        android:title="@string/search_button_name"
         app:showAsAction="ifRoom" />
 </menu>

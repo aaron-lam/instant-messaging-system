@@ -112,6 +112,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return exists;
     }
 
+    //returns true if such tuple in Chat table exists
+    public boolean isExistingChat(String chatId){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectUserQuery =    "SELECT * FROM " + TABLE_Chat +
+                " WHERE " + COL1_Chat + " = '" + chatId + "'";
+
+
+        Cursor cursor = db.rawQuery(selectUserQuery, null);
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        return exists;
+    }
+
     //returns all the id of the chats that the user is a member of
     public ArrayList<String> getUserChatIds(String username) {
         SQLiteDatabase db = this.getWritableDatabase();
