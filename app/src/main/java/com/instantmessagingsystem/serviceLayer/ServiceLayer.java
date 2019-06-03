@@ -10,6 +10,7 @@ import com.instantmessagingsystem.model.entities.User;
 import com.instantmessagingsystem.model.mapper.DatabaseHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 public class ServiceLayer {
@@ -94,4 +95,7 @@ public class ServiceLayer {
         user = null;
     }
 
+    public List<String> getChatList() {
+        return dbHelper.getUserChatIds(user.getUserName());
+    }
 }

@@ -39,9 +39,10 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     private void createAccount() {
-        if (serviceLayer.createAccount(this, usernameText.getText().toString(), passwordText.getText().toString())) {
+        boolean isCreateAccountSuccess = serviceLayer.createAccount(this, usernameText.getText().toString(), passwordText.getText().toString());
+        if (isCreateAccountSuccess) {
             // go to main page
-            startActivity(new Intent(CreateAccountActivity.this, MainActivity.class));
+            startActivity(new Intent(CreateAccountActivity.this, LoginActivity.class));
         }
     }
 }

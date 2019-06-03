@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.instantmessagingsystem.R;
+import com.instantmessagingsystem.model.entities.Chat;
 import com.instantmessagingsystem.serviceLayer.ServiceLayer;
 
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private ServiceLayer serviceLayer;
 
     private RecyclerViewAdapter adapter;
+    private RecyclerView recyclerView;
+    private List<String> localChatList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,22 +39,13 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         setContentView(R.layout.activity_main);
 
         serviceLayer = new ServiceLayer(this);
-
-        // data to populate the RecyclerView with
-        List<String> chatsListDemo = new ArrayList<>();
-        chatsListDemo.add("Chat1");
-        chatsListDemo.add("Chat2");
-        chatsListDemo.add("Chat3");
-        chatsListDemo.add("Chat4");
-        chatsListDemo.add("Chat5");
+        localChatList = new ArrayList<>();
 
         // set up the RecyclerView
-        RecyclerView recyclerView = findViewById(R.id.chat_lists_recycler_view);
+        recyclerView = findViewById(R.id.chat_lists_recycler_view);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RecyclerViewAdapter(this, chatsListDemo);
-        adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
+        render();
     }
 
     @Override
@@ -94,6 +88,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                         String chatId = String.valueOf(taskEditText.getText());
                         boolean isInserted = serviceLayer.searchChatId(chatId);
                         String toastMessage = (isInserted) ? "Chat Found" : "Chat Not Found";
+                        if (isInserted) {
+                            localChatList.add(chatId);
+                            render();
+                        }
                         Toast.makeText(MainActivity.this, toastMessage, Toast.LENGTH_LONG).show();
                     }
                 })
@@ -116,6 +114,11 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                     public void onClick(DialogInterface dialog, int which) {
                         String chatId = String.valueOf(taskEditText.getText());
                         boolean isInserted = serviceLayer.addChatId(chatId);
+                        if (isInserted) {
+                            List<String> chats = serviceLayer.getChatList();
+                            localChatList.add(chatId);
+                            render();
+                        }
                         String toastMessage = (isInserted) ? "Chat Inserted" : "Chat Not Inserted";
                         Toast.makeText(MainActivity.this, toastMessage, Toast.LENGTH_LONG).show();
                     }
@@ -126,5 +129,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         TextView messageView = dialog.findViewById(android.R.id.message);
         assert messageView != null;
         messageView.setGravity(Gravity.CENTER);
+    }
+
+    // data to populate the RecyclerView with
+    public void render() {
+        adapter = new RecyclerViewAdapter(this, localChatList);
+        adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
     }
 }
