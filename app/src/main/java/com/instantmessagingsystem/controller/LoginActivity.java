@@ -56,8 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
 
         if(isValid) {
-            boolean userExists = true;
-//            boolean userExists = serviceLayer.userExists(usernameText.getText().toString(), passwordText.getText().toString());
+            boolean userExists = serviceLayer.userExists(usernameText.getText().toString(), passwordText.getText().toString());
             toastMessage = (userExists) ? "Login Successful" : "Login Unsuccessful";
             Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
             if(userExists) {
