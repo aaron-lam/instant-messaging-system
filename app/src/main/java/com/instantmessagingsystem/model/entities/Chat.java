@@ -13,7 +13,7 @@ public class Chat {
     //constructor
     public Chat(String chatId) {
         this.chatId = chatId;
-        messages = new Stack<String>();
+        messages = new Stack<>();
         typedMessage = "";
     }
 

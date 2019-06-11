@@ -2,6 +2,7 @@ package com.instantmessagingsystem.controller;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.instantmessagingsystem.R;
-import com.instantmessagingsystem.model.entities.Chat;
 import com.instantmessagingsystem.serviceLayer.ServiceLayer;
 
 import java.util.ArrayList;
@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     @Override
     public void onItemClick(View view, int position) {
         Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(MainActivity.this, MessageListActivity.class));
     }
 
     @Override

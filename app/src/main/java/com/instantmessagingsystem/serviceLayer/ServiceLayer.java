@@ -98,4 +98,8 @@ public class ServiceLayer {
     public List<String> getChatList() {
         return dbHelper.getUserChatIds(user.getUserName());
     }
+
+    public String getUserName() {
+        return user.getUserName();
+    }
 }
