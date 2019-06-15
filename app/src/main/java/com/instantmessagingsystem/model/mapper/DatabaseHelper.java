@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.sql.Timestamp;
+import java.util.List;
 
 //persistence layer class
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -15,10 +17,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_User = "User";
     private static final String TABLE_Chat = "Chat";
     private static final String TABLE_Chat_User = "Chat_User";
+    private static final String TABLE_Message = "Message";
 
     private static final String COL1_User = "username";
     private static final String COL1_Chat = "chat_id";
     private static final String COL2_User = "password";
+    private static final String COL1_Message = "timeStamp";
+    private static final String COL2_Message = "message";
+
+    private static Integer messageCount;
 
     private static final String createUserTable = "CREATE TABLE " + TABLE_User + "(" +
             COL1_User + " TEXT PRIMARY KEY, " +
@@ -30,6 +37,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COL1_Chat + " TEXT REFERENCES " + TABLE_Chat + ", " +
             "PRIMARY KEY(" + COL1_User + ", " + COL1_Chat + "))";
 
+    private static final String createMessageTable = "CREATE TABLE " + TABLE_Message + "(" +
+            COL1_User + " TEXT REFERENCES " + TABLE_User + ", " +
+            COL1_Chat + " TEXT REFERENCES " + TABLE_Chat + ", " +
+            COL1_Message + " TEXT, " +
+            COL2_Message + " TEXT, " +
+            "PRIMARY KEY(" + COL1_User + ", " + COL1_Chat + ", " + COL1_Message + "))";
+
+
     //constructor
     public DatabaseHelper(Context context) {
         super(context, TABLE_User, null, 1);
@@ -40,6 +55,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(createUserTable);
         db.execSQL(createChatTable);
         db.execSQL(createChatUserTable);
+        db.execSQL(createMessageTable);
+        messageCount = 0;
     }
 
     @Override
@@ -47,6 +64,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_User);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_Chat);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_Chat_User);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Message);
 
         onCreate(db);
     }
@@ -98,6 +116,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    //inserts new message tuple into Message Table
+    public boolean insertMessage(String username, String chat_id, String message) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL1_User, username);
+        contentValues.put(COL1_Chat, chat_id);
+        contentValues.put(COL1_Message, new Timestamp(System.currentTimeMillis()).toString());
+        contentValues.put(COL2_Message, message);
+
+        //insert data into table
+        long result = db.insert(TABLE_Message, null, contentValues);
+
+        //if data is inserted incorrectly it will return -1
+        if (result == -1)
+            return false;
+        return true;
+    }
+
+
     //returns true if such tuple in User table exists
     public boolean isExistingUser(String username, String password) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -141,5 +178,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return chats;
+    }
+
+    //returns list of messages in chat
+    public List<String> getMessages(String chatId){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectMessageQuery = "SELECT * FROM " + TABLE_Message +
+                " WHERE " + COL1_Chat + " = '" + chatId + "'" +
+                " ORDER BY DATETIME(" + COL2_Message + ") ASC";
+
+        Cursor cursor = db.rawQuery(selectMessageQuery, null);
+
+        List<String> messages = new ArrayList<String>();
+
+        //iterate through results
+        while (cursor.moveToNext()) {
+            String message = cursor.getString(cursor.getColumnIndex(COL2_Message));
+            messages.add(message);
+        }
+        cursor.close();
+
+        return messages;
     }
 }
