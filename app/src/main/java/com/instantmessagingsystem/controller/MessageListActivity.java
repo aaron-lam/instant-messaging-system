@@ -36,27 +36,10 @@ public class MessageListActivity extends AppCompatActivity {
         serviceLayer = new ServiceLayer(this);
 
         //get messages from serviceLayer
-//        List<String> chatList = new ArrayList<>();
-//        Stack<String> messages = serviceLayer.getMessages();
-//        //add messages to chat
-//        while(!messages.isEmpty())
-//        {
-//            chatList.add(messages.peek());
-//            messages.pop();
-//        }
-
-        //get messages from serviceLayer
-        List<String> messageList = serviceLayer.getMessages();
-
+        showMessages();
 
         //define sendMessageButton behavior
         sendMessage();
-
-        mMessageRecycler = findViewById(R.id.reyclerview_message_list);
-
-        adapter = new MessageListAdapter(this, messageList);
-        mMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
-        mMessageRecycler.setAdapter(adapter);
     }
 
     public void sendMessage(){
@@ -67,9 +50,20 @@ public class MessageListActivity extends AppCompatActivity {
                         EditText  chatBox = (EditText)findViewById(R.id.edittext_chatbox);
                         serviceLayer.sendMessage(chatBox.getText().toString());
                         chatBox.setText("");
+                        showMessages();
                     }
                 }
         );
+    }
+
+    private void showMessages(){
+        List<String> messageList = serviceLayer.getMessages();
+
+        mMessageRecycler = findViewById(R.id.reyclerview_message_list);
+
+        adapter = new MessageListAdapter(this, messageList);
+        mMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
+        mMessageRecycler.setAdapter(adapter);
     }
 
     //Jerry's failed attempt

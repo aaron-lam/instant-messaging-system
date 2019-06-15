@@ -25,8 +25,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL1_Message = "timeStamp";
     private static final String COL2_Message = "message";
 
-    private static Integer messageCount;
-
     private static final String createUserTable = "CREATE TABLE " + TABLE_User + "(" +
             COL1_User + " TEXT PRIMARY KEY, " +
             COL2_User + " TEXT)";
@@ -56,7 +54,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(createChatTable);
         db.execSQL(createChatUserTable);
         db.execSQL(createMessageTable);
-        messageCount = 0;
     }
 
     @Override
