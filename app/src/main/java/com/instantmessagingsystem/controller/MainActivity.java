@@ -39,7 +39,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         setContentView(R.layout.activity_main);
 
         serviceLayer = new ServiceLayer(this);
-        localChatList = new ArrayList<>();
+        //localChatList = new ArrayList<>();
+        localChatList = serviceLayer.getChatList();
 
         // set up the RecyclerView
         recyclerView = findViewById(R.id.chat_lists_recycler_view);
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     @Override
     public void onItemClick(View view, int position) {
         Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+        serviceLayer.setChatId(adapter.getItem(position));
         startActivity(new Intent(MainActivity.this, MessageListActivity.class));
     }
 

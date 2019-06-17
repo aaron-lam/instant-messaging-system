@@ -1,23 +1,23 @@
 package com.instantmessagingsystem.serviceLayer;
 
 import android.content.Context;
-import android.content.DialogInterface;
+
 import android.widget.Toast;
 
-import com.instantmessagingsystem.controller.MainActivity;
 import com.instantmessagingsystem.model.entities.Chat;
 import com.instantmessagingsystem.model.entities.User;
 import com.instantmessagingsystem.model.mapper.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
+
 
 public class ServiceLayer {
 
     private DatabaseHelper dbHelper;
     private InputVerification verification;
     private static User user;
+    private static String chatId;
 
     public ServiceLayer(Context context) {
         dbHelper = new DatabaseHelper(context);
@@ -83,16 +83,26 @@ public class ServiceLayer {
         return dbHelper.isExistingChat(chatId);
     }
 
-    public void sendMessage() {
+    public void sendMessage(String message) {
         //send typedMessage to DB
+        dbHelper.insertMessage(user.getUserName(), chatId, message);
+    }
+
+    public List<String> getMessages(){
+        return dbHelper.getMessages(chatId);
     }
 
     public void updateChatDisplay() {
 
     }
 
+    public void setChatId(String chatId){
+        this.chatId = chatId;
+    }
+
     public void logout() {
-        user = null;
+        this.user = null;
+        this.chatId = null;
     }
 
     public List<String> getChatList() {
