@@ -10,6 +10,6 @@
         android:id="@+id/chat_list_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"/>
+        android:textSize="20sp" />
 
 </LinearLayout>
